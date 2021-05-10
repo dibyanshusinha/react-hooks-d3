@@ -1,0 +1,1 @@
+export { changePosition } from './task/taskActions';

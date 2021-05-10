@@ -1,60 +1,12 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
+import {connect} from 'react-redux'
 import { DragDropContext } from "react-beautiful-dnd";
 
 import Column from '../components/Column'
 import NavBar from '../components/Navbar'
+import {changePosition} from '../redux'
 
-export default function TaskListPage() {
-
-    const [columns, setcolumns] = useState([
-        {
-            id:"todo",
-            name: "To DO",
-            priority: 1,
-            tasks: []
-        },{
-            id:"inprogress",
-            name: "In Progress",
-            priority: 2,
-            tasks: []
-        },{
-            id:"done",
-            name: "Done",
-            priority: 3,
-            tasks: []
-        }
-    ]);
-
-    useEffect(() => {
-        setcolumns([
-            {
-                id:"todo",
-                name: "To Do",
-                tasks: [
-                    {id: "asdf0", priority: 1, title: "Task Zero", subtitle: "Description", desc: "Random description"}
-                ]
-            },{
-                id:"inprogress",
-                name: "In Progress",
-                tasks: [
-                    {id: "asdf2", priority: 1, title: "Task One", subtitle: "Description", desc: "Random description"}, 
-                    {id: "asdf3", priority: 2, title: "Task Two", subtitle: "Description", desc: "Random description"}, 
-                    {id: "asdf4", priority: 2, title: "Task Three", subtitle: "Description", desc: "Random description"}, 
-                ]
-            },{
-                id:"done",
-                name: "Done",
-                tasks: [
-                    {id: "asdf5", priority: 1, title: "Task Four", subtitle: "Description1", desc: "Random description"}, 
-                    {id: "asdf6", priority: 1, title: "Task Five", subtitle: "Description2", desc: "Random description"}, 
-                    {id: "asdf7", priority: 3, title: "Task Six", subtitle: "Description3", desc: "Random description"}, 
-                ]
-            }
-        ]);
-        return () => {
-            // do cleanup if needed
-        }
-    }, [])
+const TaskListPage = ({columns, changePosition}) => {
 
     const onDragEnd = result => {
         // return if item was dropped outside
@@ -73,7 +25,7 @@ export default function TaskListPage() {
         newColumns[droppedFrom].tasks.splice(result.source.index, 1);
         //Update Item in Destination
         newColumns[droppedInto].tasks.splice(result.destination.index, 0, draggedItem);
-        setcolumns(newColumns);
+        changePosition(newColumns);
     };
 
     return (
@@ -97,3 +49,22 @@ export default function TaskListPage() {
 
     )
 }
+
+
+const mapStateToProps = state =>{
+    return {
+        columns: state.tasks.columns
+    }
+}
+
+const mapDispatchToProps = dispatch =>{
+    return {
+        changePosition: updatedColumns => dispatch(changePosition(updatedColumns))
+    }
+}
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TaskListPage);
