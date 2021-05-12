@@ -1,40 +1,23 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
-import {Provider} from 'react-redux'
+import React, {useEffect} from "react";
+import {useSelector, useDispatch} from 'react-redux'
 
+import {getAuthUser} from "./redux/auth/authActions"
+import Loading from './components/Loading'
+import Routes from './routes'
 
-import store from './redux/store'
-
-import LoginPage from "./pages/LoginPage"
-import TaskListPage from "./pages/TaskListPage"
-import AnalyticsPage from "./pages/AnalyticsPage"
-import AddTaskPage from "./pages/AddTaskPage"
 
 const App = () => {
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getAuthUser())    
+  }, [dispatch])
+
   return (
-    <Provider store={store}>
-      <div className="App">
-        <Router>
-          <Switch>
-              <Route exact path="/">
-                <TaskListPage/>
-              </Route>
-              <Route exact path="/login">
-                <LoginPage />
-              </Route>
-              <Route exact path="/analytics">
-                <AnalyticsPage/>
-              </Route>
-              <Route exact path="/create">
-                <AddTaskPage/>
-              </Route>
-            </Switch>
-          </Router>
-      </div>
-    </Provider>
+    <div className="App">
+      { isAuthenticated === null ? <Loading /> : <Routes isAuthenticated={isAuthenticated} /> }
+    </div>
   );
 }
 

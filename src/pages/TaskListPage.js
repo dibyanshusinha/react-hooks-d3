@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { DragDropContext } from "react-beautiful-dnd";
+import {Link} from "react-router-dom";
 
 import Column from '../components/Column'
 import NavBar from '../components/Navbar'
@@ -29,13 +30,13 @@ const TaskListPage = ({columns, changePosition}) => {
     };
 
     return (
-        <div className="d-flex flex-wrap h-100 flex-lg-row flex-sm-col">
+        <div id="taskPage" className="d-flex h-100 flex-lg-row flex-sm-col">
             <NavBar showMobileMenu/>
             <div className="flex-grow-1">
                 <div id="tasks" className="container-fluid">
                     <div className="row py-2 bg-light-grey d-none d-lg-block">
                         <div className="col p-2 d-flex justify-content-end">
-                            <a href="/create" type="button" className="btn text-white bg-green btn-sm">Add Task</a>
+                            <Link to="/create" type="button" className="btn text-white bg-green btn-sm">Add Task</Link>
                         </div>
                     </div>
                     <div className="row pt-4 px-2">
@@ -46,7 +47,6 @@ const TaskListPage = ({columns, changePosition}) => {
                 </div>
             </div>
         </div>
-
     )
 }
 
